@@ -7,6 +7,7 @@ scalaVersion := "2.10.4"
 libraryDependencies ++= Seq(
   "io.spray" % "spray-client" % "1.3.1",
   "io.spray" % "spray-can" % "1.3.1",
+  "io.spray" %% "spray-json" % "1.2.6",
   // akka 2.2.x required for spray
   "com.typesafe.akka" %% "akka-actor" % "2.3.2",
   "com.typesafe.akka" %% "akka-slf4j" % "2.3.2",
