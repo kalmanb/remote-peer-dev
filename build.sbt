@@ -14,7 +14,7 @@ libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-testkit" % "2.3.2" % "test",
   "ch.qos.logback" % "logback-classic" % "1.1.2",
   "org.scalaz" %% "scalaz-core" % "7.0.6",
-  "com.googlecode.java-diff-utils" % "diffutils" % "1.2.1",
+  "com.sksamuel.diff" % "diff" % "1.1.11",
   // Test
   "org.scalatest" %% "scalatest" % "2.1.3" % "test",
   "junit" % "junit" % "4.11" % "test",
