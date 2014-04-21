@@ -26,7 +26,7 @@ trait MockitoWrapper {
   def reset[T](mock: T) = Mockito.reset(mock)
 }
 
-trait AkkaTest extends TestKitBase with TestSpec {
+trait AkkaSpec extends TestKitBase with TestSpec {
   // this must be lazy because TestKitBase requires it to be available BEFORE the actor is run
   implicit lazy val system = ActorSystem("AkkaTestSystem")         
 }

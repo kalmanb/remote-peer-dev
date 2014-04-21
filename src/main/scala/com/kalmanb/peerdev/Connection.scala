@@ -25,12 +25,12 @@ object Connection {
     perms: List[String] = perms)
 
   case class Response(
-    name: String,
     user_id: Int,
     bufs: Map[String, Buffer],
     owner: String,
     tree: Map[String, Int],
     users: Map[String, User],
+    name: String = "room_info",
     room_name: String = "main-room",
     max_size: Int = 52428800,
     secret: Boolean = false,

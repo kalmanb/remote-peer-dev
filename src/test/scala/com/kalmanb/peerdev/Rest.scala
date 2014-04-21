@@ -1,6 +1,5 @@
 package com.kalmanb.peerdev
 
-import org.scalatest.{ FunSpec, BeforeAndAfter }
 import com.kalmanb.test._
 
 import akka.actor._
@@ -17,7 +16,7 @@ import akka.actor.Actor
 import akka.io.IO
 import spray.can.Http
 
-class Rest extends AkkaTest {
+class Rest extends AkkaSpec {
   import ExecutionContext.Implicits.global
   //val log = Logging(system, getClass)
   var server: ActorRef = _
