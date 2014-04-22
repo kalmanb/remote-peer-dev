@@ -1,12 +1,14 @@
 package com.kalmanb.test
 
 import org.mockito.Mockito
+import org.mockito.ArgumentCaptor
 import org.mockito.verification.VerificationMode
 import org.scalatest._
 import org.scalatest.matchers._
 import org.scalatest.mock.MockitoSugar
 import akka.testkit._
 import akka.actor._ 
+import scala.reflect.ClassTag 
 
 trait TestSpec extends FunSpecLike
   with Matchers
@@ -24,6 +26,9 @@ trait MockitoWrapper {
   def never = Mockito.never
   def times(wantedNumberOfInvocations: Int) = Mockito.times(wantedNumberOfInvocations)
   def reset[T](mock: T) = Mockito.reset(mock)
+  def doThrow(t: Throwable) = Mockito.doThrow(t)
+  def argumentCaptor[T: ClassTag] = ArgumentCaptor.forClass(implicitly[ClassTag[T]].runtimeClass.asInstanceOf[Class[T]])
+  def verifyNoMoreInteractions[T <: AnyRef](mock: T) = Mockito.verifyNoMoreInteractions(mock)
 }
 
 trait AkkaSpec extends TestKitBase with TestSpec {
