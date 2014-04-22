@@ -2,7 +2,6 @@ package com.kalmanb.peerdev
 
 import com.kalmanb.test._
 import akka.testkit._
-import org.mockito.Matchers._
 import java.io.File
 
 class FileHandlerTest extends AkkaSpec {
@@ -18,8 +17,6 @@ class FileHandlerTest extends AkkaSpec {
         path = "test.txt",
         patch = patch
       )
-      //val fileUtils = mock[FileUtils]
-      //when(fileUtils.read(any[File])).thenReturn("123\n")
 
       val fileHandler = TestActorRef(new FileHandler())
 
@@ -36,32 +33,7 @@ class FileHandlerTest extends AkkaSpec {
   }
 }
 
-import akka.actor._
-class FileHandler() extends Actor {
-  var current =  "" //fileUtils.read(new File(""))
-  println(current)
-  def receive = {
-    case r: Patch.Request ⇒ current = PatchUtils.applyPatches(r.patch, current)
-    case _                ⇒
-  }
-}
-
 class FileUtils {
   def read(file: File): String = ""
 }
 
-case class FileDetails(
-  path: String,
-  id: Int)
-
-object Patch {
-  case class Request(
-    user_id: Int,
-    username: String,
-    md5_before: String,
-    md5_after: String,
-    id: Int,
-    path: String,
-    patch: String,
-    name: String = "patch")
-}
