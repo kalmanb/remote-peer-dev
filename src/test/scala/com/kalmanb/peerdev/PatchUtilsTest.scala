@@ -2,7 +2,7 @@ package com.kalmanb.peerdev
 
 import com.kalmanb.test.TestSpec
 
-class PatchTest extends TestSpec {
+class PatchUtilsTest extends TestSpec {
 
   describe("DiffMatchPatch") {
     it("it should apply patches correctly") {
