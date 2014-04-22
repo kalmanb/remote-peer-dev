@@ -10,14 +10,10 @@ class PatchUtilsTest extends TestSpec {
       val patch = "@@ -1,4 +1,5 @@\n 123%0A\n+4\n"
       val expected = "123\n4"
 
-      import com.sksamuel.diffpatch.DiffMatchPatch
-      import com.sksamuel.diffpatch.DiffMatchPatch.Patch
-      val dmp = new DiffMatchPatch
-
-      val patches = dmp.patch_fromText(patch).asInstanceOf[java.util.LinkedList[Patch]]
-      val result = dmp.patch_apply(patches, orig)(0)
+      val result = PatchUtils.applyPatches(patch, orig)
 
       result should be(expected)
     }
   }
 }
+
