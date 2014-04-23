@@ -29,6 +29,7 @@ class FileHandlerTest extends AkkaSpec {
     }
 
     it("should write changes to disk") {
+      fail()
     }
   }
 }
