@@ -34,7 +34,3 @@ class FileHandlerTest extends AkkaSpec {
   }
 }
 
-class FileUtils {
-  def read(file: File): String = ""
-}
-

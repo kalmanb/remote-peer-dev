@@ -7,29 +7,16 @@ import java.io.File
 class WorkspaceManagerTest extends AkkaSpec {
 
   describe("workspace manager") {
-    it("should load all files into FileHandlers") {
+    it("should correctly load all files form workspace") {
       // abc.txt and 123.txt
       val workspaceManager = TestActorRef(new WorkspaceManager(new File("./src/test/resources/workspace")))
 
       val files = workspaceManager.underlyingActor.files
-      files should contain value (Buf("abc.txt", "", ""))
-      files should contain value (Buf("123.txt", "", ""))
+
+      files.size should be(2)
+      files should contain(Buf("abc.txt", "abc\ndef\n", "f72fe788e136ba9e53518afa8b407eac"))
+      files should contain(Buf("123.txt", "123\n456\n", "c010aff9dc6276fdb7efefd1a2757658"))
     }
   }
 }
-import akka.actor.Actor
-class WorkspaceManager(workspaceDir: File) extends Actor {
 
-  val listedFiles: List[File] = workspaceDir.listFiles().toList
-  val files = listedFiles.foldLeft(List[(Int, Buf)]())((m, file: File) ⇒
-    (m.size, Buf(file.getName, "", "")) :: m
-  ).toMap
-  def receive = {
-    case _ ⇒
-  }
-}
-
-case class Buf(
-  path: String,
-  content: String,
-  md5: String)
