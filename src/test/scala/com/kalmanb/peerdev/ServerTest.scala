@@ -8,7 +8,8 @@ class ServerTest extends AkkaSpec {
 
   describe("server") {
     it("should accept client connections") {
-      val server = system.actorOf(Props(new Server))
+      val handler = system.actorOf(Props[SimplisticHandler])
+      val server = system.actorOf(Props(new Server(handler)))
 
       val remote = new InetSocketAddress("localhost", 8888)
       val replies = system.actorOf(Props(new Actor {
@@ -24,36 +25,15 @@ class ServerTest extends AkkaSpec {
   }
 }
 
-import akka.actor.Actor
-import akka.actor.Props
-import akka.util.ByteString
 import akka.io.IO
 import akka.io.Tcp
-
-class Server extends Actor {
-
-  import akka.io.Tcp._
-  import context.system
-
-  IO(Tcp) ! Bind(self, new InetSocketAddress("localhost", 8888))
-
-  def receive = {
-    case b @ Bound(localAddress) ⇒
-    // do some logging or setup ...
-
-    case CommandFailed(_: Bind)  ⇒ context stop self
-
-    case c @ Connected(remote, local) ⇒
-      val handler = context.actorOf(Props[SimplisticHandler])
-      val connection = sender()
-      connection ! Register(handler)
-  }
-}
+import akka.util.ByteString
 
 class SimplisticHandler extends Actor {
   import Tcp._
   def receive = {
     case Received(data: ByteString) ⇒
+      println(s"Server recieved : $data")
       sender() ! Write(data)
     case PeerClosed ⇒
       context stop self
