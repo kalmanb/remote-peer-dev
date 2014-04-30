@@ -6,19 +6,19 @@ import akka.actor._
 
 class ServerTest extends AkkaSpec {
 
-  describe("protocol") {
-    it("should work") {
+  describe("server") {
+    it("should accept client connections") {
       val server = system.actorOf(Props(new Server))
-      
-      val remote = InetSocketAddress.createUnresolved("localhost", 8888)
+
+      val remote = new InetSocketAddress("localhost", 8888)
       val replies = system.actorOf(Props(new Actor {
         def receive = {
-          case a => println ("aaaaaa " + a)
+          case a ⇒ println("aaaaaa " + a)
         }
       }))
-      val client = Client.props(remote, replies)
+      val client = system.actorOf(Props(new Client(remote, replies)))
 
-      Thread sleep 10000
+      Thread sleep 3000
       system.shutdown
     }
   }
@@ -47,56 +47,53 @@ class Server extends Actor {
       val handler = context.actorOf(Props[SimplisticHandler])
       val connection = sender()
       connection ! Register(handler)
-      
-    case a => println("xxxxx " + a)
   }
 }
 
 class SimplisticHandler extends Actor {
   import Tcp._
   def receive = {
-    case Received(data: ByteString) ⇒ sender() ! Write(data)
-    case PeerClosed                 ⇒ context stop self
+    case Received(data: ByteString) ⇒
+      sender() ! Write(data)
+    case PeerClosed ⇒
+      context stop self
   }
 }
 
 object Client {
   def props(remote: InetSocketAddress, replies: ActorRef) =
-    Props(classOf[Client], remote, replies)
+    Props(new Client(remote, replies))
 }
- 
+
 class Client(remote: InetSocketAddress, listener: ActorRef) extends Actor {
- 
+
   import Tcp._
   import context.system
- 
+
   IO(Tcp) ! Connect(remote)
- 
+
   def receive = {
-    case CommandFailed(_: Connect) =>
+    case CommandFailed(_: Connect) ⇒
       listener ! "connect failed"
       context stop self
- 
-    case c @ Connected(remote, local) =>
-      println("cccccccccccc")
+
+    case c @ Connected(remote, local) ⇒
       listener ! c
       val connection = sender()
       connection ! Register(self)
       context become {
-        case data: ByteString =>
+        case data: ByteString ⇒
           connection ! Write(data)
-        case CommandFailed(w: Write) =>
+        case CommandFailed(w: Write) ⇒
           // O/S buffer was full
           listener ! "write failed"
-        case Received(data) =>
+        case Received(data) ⇒
           listener ! data
-        case "close" =>
+        case "close" ⇒
           connection ! Close
-        case _: ConnectionClosed =>
+        case _: ConnectionClosed ⇒
           listener ! "connection closed"
           context stop self
       }
-
-        case a => println("zzzzzzzzzz  " + a)
   }
 }
