@@ -4,7 +4,7 @@ import com.kalmanb.test.AkkaSpec
 import java.net.InetSocketAddress
 import akka.actor._
 
-class ServerTest extends AkkaSpec {
+class HandlerTest extends AkkaSpec {
 
   describe("server") {
     it("should accept client connections") {
