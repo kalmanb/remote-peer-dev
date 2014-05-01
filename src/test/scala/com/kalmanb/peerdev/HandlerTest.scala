@@ -3,6 +3,7 @@ package com.kalmanb.peerdev
 import com.kalmanb.test.AkkaSpec
 import java.net.InetSocketAddress
 import akka.actor._
+import akka.testkit._
 
 class HandlerTest extends AkkaSpec {
 
@@ -12,18 +13,28 @@ class HandlerTest extends AkkaSpec {
       val server = system.actorOf(Props(new Server(handler)))
 
       val remote = new InetSocketAddress("localhost", 8888)
-      val replies = system.actorOf(Props(new Actor {
-        def receive = {
-          case a ⇒ println("aaaaaa " + a)
-        }
-      }))
+      val replies = TestActorRef(new AActor)
       val client = system.actorOf(Props(new Client(remote, replies)))
 
-      Thread sleep 3000
+      awaitCondition("wait for it...") {
+        replies.underlyingActor.gotIt should be("done") 
+      }
+      println(replies.underlyingActor.gotIt)
+
       system.shutdown
     }
   }
 }
+
+      class AActor extends Actor {
+        var gotIt = "not yet"
+        def receive = {
+          case a ⇒
+            println("aaaaaaa")
+            //gotIt = true
+        }
+      }
+
 
 import akka.io.IO
 import akka.io.Tcp
