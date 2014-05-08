@@ -7,12 +7,15 @@ import org.scalatest._
 import org.scalatest.matchers._
 import org.scalatest.mock.MockitoSugar
 import akka.testkit._
-import akka.actor._ 
-import scala.reflect.ClassTag 
+import akka.actor._
+import reflect.ClassTag
+import scala.concurrent.duration.Duration
+import scala.concurrent.duration._
+import scala.annotation.tailrec
 
 trait TestSpec extends FunSpecLike
   with Matchers
-  with MockitoSugar             
+  with MockitoSugar
   with MockitoWrapper
   with BeforeAndAfter
   with BeforeAndAfterEach
@@ -33,7 +36,27 @@ trait MockitoWrapper {
 
 trait AkkaSpec extends TestKitBase with TestSpec {
   // this must be lazy because TestKitBase requires it to be available BEFORE the actor is run
-  implicit lazy val system = ActorSystem("AkkaTestSystem")         
+  implicit lazy val system = ActorSystem("AkkaTestSystem")
+
+  def awaitCondition[T](message: String, max: Duration = 10 seconds, interval: Duration = 10 millis)(predicate: ⇒ T) {
+    val stop = now + max
+
+    @tailrec
+    def poll(nextSleepInterval: Duration) {
+      try predicate
+      catch {
+        case e: Throwable ⇒
+          println("aaaaaaaaaa")
+          if (now > stop)
+            throw e
+          else {
+            Thread.sleep(nextSleepInterval.toMillis)
+            poll((stop - now) min interval)
+          }
+      }
+    }
+  }
+
 }
 
 // Tagging

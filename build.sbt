@@ -1,14 +1,11 @@
 organization := "com.kalmanb"
 
-name := "peer-dev"
+name := "remote-peer-dev"
 
-scalaVersion := "2.10.4"
+scalaVersion := "2.11.0"
 
 libraryDependencies ++= Seq(
-  "io.spray" % "spray-client" % "1.3.1",
-  "io.spray" % "spray-can" % "1.3.1",
-  "io.spray" %% "spray-json" % "1.2.6",
-  // akka 2.2.x required for spray
+  "io.spray" % "spray-json_2.11.0-RC4" % "1.2.6",
   "com.typesafe.akka" %% "akka-actor" % "2.3.2",
   "com.typesafe.akka" %% "akka-slf4j" % "2.3.2",
   "com.typesafe.akka" %% "akka-testkit" % "2.3.2" % "test",
