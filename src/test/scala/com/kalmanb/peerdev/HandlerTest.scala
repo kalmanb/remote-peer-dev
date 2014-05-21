@@ -17,7 +17,7 @@ class HandlerTest extends AkkaSpec {
       val client = system.actorOf(Props(new Client(remote, replies)))
 
       awaitCondition("wait for it...") {
-        replies.underlyingActor.gotIt should be("done") 
+        replies.underlyingActor.gotIt should be("done")
       }
       println(replies.underlyingActor.gotIt)
 
@@ -26,15 +26,14 @@ class HandlerTest extends AkkaSpec {
   }
 }
 
-      class AActor extends Actor {
-        var gotIt = "not yet"
-        def receive = {
-          case a ⇒
-            println("aaaaaaa")
-            //gotIt = true
-        }
-      }
-
+class AActor extends Actor {
+  var gotIt = "not yet"
+  def receive = {
+    case a ⇒
+      println("aaaaaaa")
+    //gotIt = true
+  }
+}
 
 import akka.io.IO
 import akka.io.Tcp

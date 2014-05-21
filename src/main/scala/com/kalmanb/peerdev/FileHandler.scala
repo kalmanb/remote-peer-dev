@@ -2,7 +2,7 @@ package com.kalmanb.peerdev
 
 import akka.actor._
 
-class FileHandler() extends Actor {
+class FileHandler extends Actor {
   var current = "" 
 
   def receive = {
