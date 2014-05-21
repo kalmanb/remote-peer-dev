@@ -21,6 +21,7 @@ libraryDependencies ++= Seq(
 
 scalacOptions ++= Seq( "-deprecation", "-unchecked", "-feature" ,"-language:postfixOps" )
 
+javacOptions ++= Seq("-Xlint")
 
 
 
