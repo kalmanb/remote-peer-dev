@@ -2,7 +2,7 @@ organization := "com.kalmanb"
 
 name := "remote-peer-dev"
 
-scalaVersion := "2.11.0"
+scalaVersion := "2.11.1"
 
 libraryDependencies ++= Seq(
   "io.spray" % "spray-json_2.11.0-RC4" % "1.2.6",
